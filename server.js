@@ -42,28 +42,12 @@ function handleMessage(error, receivedMessage) {
 }
 
 function processMessage(message) {
-	console.log(message);
+	asbService.sendQueueMessage(message.reciever + '-recieve', message, function(error) {
+		if (error) {
+			console.log(error);
+		}
+		requestMessage();
+	});
 }
 
-//FIXME #ExampleImplementation
-/*
-var message = {
-	keks: 'test',
-	body: 'Test message',
-	customProperties: {
-		testproperty: 'TestValue'
-	}
-};
-
-asbService.sendQueueMessage('user-send', message, function(error){
-	if(!error){
-		console.log('Message sent!');
-	}
-});
-
-asbService.receiveQueueMessage('user-send', function(error, receivedMessage){
-	if(!error){
-		// Message received and deleted
-		console.log(receivedMessage.body);
-	}
-});*/
+requestMessage();
