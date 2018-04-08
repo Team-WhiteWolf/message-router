@@ -3,7 +3,6 @@
 const azure = require('azure');
 
 const azureKey = 'Endpoint=sb://servicequeues.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=AUNiefT6dHz3ivqbYvpteI+LlwvOWE2M0OleRycSXzs=';
-
 const asbService = azure.createServiceBusService(azureKey);
 
 const queueIterator = function() {
@@ -28,10 +27,26 @@ const queueIterator = function() {
 	};
 }();
 
-for(i = 0; i < 20; i++) {
-	console.log(queueIterator.next());
+function requestMessage() {
+	asbService.receiveQueueMessage(queueIterator.next().value, { timeoutIntervalInS: 3 }, handleMessage);
 }
 
+function handleMessage(error, receivedMessage) {
+	if (error) {
+		requestMessage();
+		return;
+	}
+
+	processMessage(receivedMessage);
+	requestMessage();
+}
+
+function processMessage(message) {
+	console.log(message);
+}
+
+//FIXME #ExampleImplementation
+/*
 var message = {
 	keks: 'test',
 	body: 'Test message',
@@ -51,4 +66,4 @@ asbService.receiveQueueMessage('user-send', function(error, receivedMessage){
 		// Message received and deleted
 		console.log(receivedMessage.body);
 	}
-});
+});*/
