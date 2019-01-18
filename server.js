@@ -13,7 +13,8 @@ const queueIterator = function() {
 		'project-send',
 		'calendar-send',
 		'permission-send',
-		'issue-send'
+		'issue-send',
+		'queueui-send'
 	];
 
 	return {
